@@ -105,13 +105,8 @@ function createOrdererCertificate {
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/signcerts/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
   # {NotWorking} cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/keystore/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.key 
 
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts/ca.crt
-
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/tlsca
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
-
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/ca
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/msp/cacerts/* ${PWD}/organizations/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
 
 
@@ -135,13 +130,8 @@ function createOrdererCertificate {
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/signcerts/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
   # {NotWorking} cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/keystore/* ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.key 
 
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/msp/tlscacerts/ca.crt
-
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/tlsca
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/tlscacerts/* ${PWD}/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
-
-  mkdir ${PWD}/organizations/ordererOrganizations/example.com/ca
   cp ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/msp/cacerts/* ${PWD}/organizations/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
 
 
@@ -157,7 +147,6 @@ function createOrdererCertificate {
   mkdir -p organizations/ordererOrganizations/example.com/users/Admin@example.com
   
 	fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:9054 --caname  ca-orderer  -M ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/ordererOrg/tls-cert.pem
-  
 
   cp ${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml ${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/config.yaml
 

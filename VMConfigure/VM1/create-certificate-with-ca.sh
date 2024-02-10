@@ -14,16 +14,16 @@ function createOrg1 {
   echo 'NodeOUs:
   Enable: true
   ClientOUIdentifier:
-    Certificate: cacerts/cacert.pem
+    Certificate: cacerts/localhost-7054-ca-ogr1.pem
     OrganizationalUnitIdentifier: client
   PeerOUIdentifier:
-    Certificate: cacerts/cacert.pem
+    Certificate: cacerts/localhost-7054-ca-ogr1.pem
     OrganizationalUnitIdentifier: peer
   AdminOUIdentifier:
-    Certificate: cacerts/cacert.pem
+    Certificate: cacerts/localhost-7054-ca-ogr1.pem
     OrganizationalUnitIdentifier: admin
   OrdererOUIdentifier:
-    Certificate: cacerts/cacert.pem
+    Certificate: cacerts/localhost-7054-ca-ogr1.pem
     OrganizationalUnitIdentifier: orderer' > ${PWD}/organizations/peerOrganizations/org1.example.com/msp/config.yaml
 
 # Register...

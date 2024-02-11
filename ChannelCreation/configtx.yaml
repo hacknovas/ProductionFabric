@@ -1,0 +1,214 @@
+Organizations:
+  - &OrdererOrg
+      Name: OrdererOrg
+      ID: OrdererOrgMSP
+      MSPDir: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('OrdererOrgMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('OrdererOrgMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('OrdererOrgMSP.admin')"
+
+  - &Org1
+      Name: Org1
+      ID: Org1MSP
+      MSPDir: ../VMConfigure/VM1/organizations/peerOrganizations/org1.example.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('Org1MSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('Org1MSP.peer')"
+
+      AnchorPeers:
+          - Host: peer0.0rg1.example.com
+            Port: 7054
+
+  - &Org2
+      Name: Org2
+      ID: Org2MSP
+      MSPDir: ../VMConfigure/VM2/organizations/peerOrganizations/org2.example.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('Org2MSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('Org2MSP.peer')"
+
+      AnchorPeers:
+          - Host: peer0.0rg2.example.com
+            Port: 8054
+
+  - &Org3
+      Name: Org3
+      ID: Org3MSP
+      MSPDir: ../VMConfigure/VM3/organizations/peerOrganizations/org3.example.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('Org3MSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('Org3MSP.peer')"
+
+      AnchorPeers:
+          - Host: peer0.0rg3.example.com
+            Port: 10054
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V3_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_5: true
+
+Application: &ApplicationDefaults
+    Organizations:
+
+    Policies: &ApplicationDefaultPolicies
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+
+    OrdererType: etcdraft
+
+    EtcdRaft:
+          Consenters:
+              - Host: raft0.example.com
+                Port: 7050
+                ClientTLSCert: path/to/ClientTLSCert0
+                ServerTLSCert: path/to/ServerTLSCert0
+
+    Addresses:
+        # - 127.0.0.1:7050
+
+
+
+    BatchTimeout: 2s
+
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+     Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    BasicChannel:
+        <<: *ChannelDefaults
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+                - *Org3
+            Capabilities:
+                <<: *ApplicationCapabilities
+    
+    OrdererGenesis:
+        <<: *ChannelDefaults
+        Capabilities:
+          <<: *ChannelCapabilities
+        Orderer:
+          <<: *OrdererDefaults
+          OrdererType: etcdraft
+          EtcdRaft:
+            Consenters:
+                - Host: raft0.example.com
+                  Port: 7050
+                  ClientTLSCert: path/to/ClientTLSCert0
+                  ServerTLSCert: path/to/ServerTLSCert0
+                - Host: raft1.example.com
+                  Port: 7050
+                  ClientTLSCert: path/to/ClientTLSCert1
+                  ServerTLSCert: path/to/ServerTLSCert1
+                - Host: raft2.example.com
+                  Port: 7050
+                  ClientTLSCert: path/to/ClientTLSCert2
+                  ServerTLSCert: path/to/ServerTLSCert2
+        Organizations:
+          - *OrdererOrg
+        Capabilities:
+            <<: *OrdererCapabilities
+    Consortiums:
+            SampleConsortium:
+              Organizations:
+                  - *Org1
+                  - *Org2
+                  - *Org3
+
+# https://github.com/hyperledger/fabric/blob/main/sampleconfig/configtx.yaml

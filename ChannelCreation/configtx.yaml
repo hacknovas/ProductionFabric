@@ -121,15 +121,13 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
           Consenters:
-              - Host: raft0.example.com
+              - Host: orderer1.example.com
                 Port: 7050
-                ClientTLSCert: path/to/ClientTLSCert0
-                ServerTLSCert: path/to/ServerTLSCert0
+                ClientTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
+                ServerTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
 
     Addresses:
-        # - 127.0.0.1:7050
-
-
+        - orderer1.example.com:7050
 
     BatchTimeout: 2s
 
@@ -188,27 +186,33 @@ Profiles:
           OrdererType: etcdraft
           EtcdRaft:
             Consenters:
-                - Host: raft0.example.com
+                - Host: orderer1.example.com
                   Port: 7050
-                  ClientTLSCert: path/to/ClientTLSCert0
-                  ServerTLSCert: path/to/ServerTLSCert0
-                - Host: raft1.example.com
-                  Port: 7050
-                  ClientTLSCert: path/to/ClientTLSCert1
-                  ServerTLSCert: path/to/ServerTLSCert1
-                - Host: raft2.example.com
-                  Port: 7050
-                  ClientTLSCert: path/to/ClientTLSCert2
-                  ServerTLSCert: path/to/ServerTLSCert2
-        Organizations:
-          - *OrdererOrg
-        Capabilities:
-            <<: *OrdererCapabilities
-    Consortiums:
-            SampleConsortium:
-              Organizations:
-                  - *Org1
-                  - *Org2
-                  - *Org3
+                  ClientTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
+                  ServerTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
+                - Host: orderer2.example.com
+                  Port: 8050
+                  ClientTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+                  ServerTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+                - Host: orderer3.example.com
+                  Port: 9050
+                  ClientTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+                  ServerTLSCert: ../VMConfigure/VM4/organizations/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/server.crt
+                
+            Addresses:
+                - orderer1.example.com:7050
+                - orderer2.example.com:8050
+                - orderer3.example.com:9050
+        
+            Organizations:
+            - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+                SampleConsortium:
+                Organizations:
+                    - *Org1
+                    - *Org2
+                    - *Org3
 
 # https://github.com/hyperledger/fabric/blob/main/sampleconfig/configtx.yaml
